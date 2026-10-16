@@ -7,7 +7,7 @@ from pydantic import ValidationError
 from modelos import Apunte
 
 
-MODELO = "gemini-3.8-flash"
+MODELO = "gemini-2.5-flash-lite"
 INSTRUCCION_SISTEMA = (
     "Actúa como un profesor paciente de bachillerato de El Salvador. "
     "Escribe siempre en español salvadoreño claro. Basa tu análisis únicamente "
