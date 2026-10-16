@@ -1,5 +1,5 @@
 import streamlit as st
-from google.genai.errors import ServerError
+from google.genai.errors import ClientError, ServerError
 
 from cerebro import ImagenIlegible, analizar_pagina, calificar, crear_cliente
 from voz import decir
@@ -62,6 +62,18 @@ def procesar_imagen(archivo) -> None:
             )
         else:
             st.error(f"Gemini no pudo analizar la imagen (error {error.code}).")
+    except ClientError as error:
+        if error.code == 404:
+            st.error(
+                "Google no reconoce el modelo de análisis configurado. "
+                "Actualizá la aplicación y volvé a intentarlo."
+            )
+        elif error.code in (401, 403):
+            st.error("Google rechazó la llave API o no tiene permiso para usar Gemini.")
+        elif error.code == 429:
+            st.warning("Se alcanzó el límite temporal de solicitudes de Gemini. Esperá un momento y volvé a intentarlo.")
+        else:
+            st.error(f"Google rechazó la solicitud de análisis (error {error.code}).")
     except Exception as error:
         st.error(f"No se pudo analizar la página. Revisá tu conexión e intentá de nuevo. Detalle: {error}")
 
