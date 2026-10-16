@@ -64,9 +64,10 @@ def procesar_imagen(archivo) -> None:
             st.error(f"Gemini no pudo analizar la imagen (error {error.code}).")
     except ClientError as error:
         if error.code == 404:
+            detalle = f" Detalle de Google: {error.message}" if error.message else ""
             st.error(
-                "Google no reconoce el modelo de análisis configurado. "
-                "Actualizá la aplicación y volvé a intentarlo."
+                "Google no pudo encontrar o habilitar el modelo de análisis para esta solicitud."
+                f"{detalle}"
             )
         elif error.code in (401, 403):
             st.error("Google rechazó la llave API o no tiene permiso para usar Gemini.")
